@@ -526,7 +526,6 @@
     </footer>
 
     <script>
-        // Kullanıcı veritabanı
         const users = {
             'admin': { password: 'nursi2025', role: 'admin', name: 'Yönetici' },
             'starbucks': { password: 'sb123', role: 'client', name: 'Starbucks Taksim' },
@@ -645,7 +644,6 @@
                 return;
             }
 
-            // Dosya boyutu kontrolü (5MB limit)
             for (const file of fileInput.files) {
                 if (file.size > 5 * 1024 * 1024) {
                     alert(`${file.name} dosyası çok büyük! Maksimum 5MB olmalıdır.`);
