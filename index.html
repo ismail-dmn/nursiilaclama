@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nursi İlaçlama - Profesyonel Haşere Kontrol Hizmetleri</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c5f2d 0%, #97bc62 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .login-btn {
+            background: white;
+            color: #2c5f2d;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #2c5f2d 0%, #97bc62 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c5f2d;
+            margin-bottom: 3rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border-top: 4px solid #97bc62;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: #2c5f2d;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .service-card p {
+            text-align: center;
+            color: #666;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5f2d;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2c5f2d 0%, #97bc62 100%);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .portal-container {
+            display: none;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .portal-container.active {
+            display: block;
+        }
+
+        .portal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .admin-section {
+            background: #e8f5e9;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 2px solid #97bc62;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .document-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            border-left: 4px solid #97bc62;
+        }
+
+        .document-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .document-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .document-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+
+        .document-date {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .download-btn, .delete-btn {
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            background: #2c5f2d;
+            color: white;
+        }
+
+        .download-btn:hover {
+            background: #1e4620;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .footer {
+            background: #2c5f2d;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .contact-section {
+            background: #f8f9fa;
+            padding: 3rem 2rem;
+        }
+
+        .contact-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        #mainContent.hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div>
+                    <div class="logo">🦟 Nursi İlaçlama</div>
+                    <div class="logo-subtitle">Profesyonel Haşere Kontrol</div>
+                </div>
+            </div>
+            <button class="login-btn" onclick="openLoginModal()">Müşteri Portalı</button>
+        </div>
+    </header>
+
+    <div id="mainContent">
+        <section class="hero">
+            <h1>Güvenli ve Etkili Haşere Kontrolü</h1>
+            <p>Sağlıklı yaşam alanları için profesyonel ilaçlama hizmetleri. Ev, işyeri ve endüstriyel tesisleriniz için kapsamlı çözümler sunuyoruz.</p>
+        </section>
+
+        <section class="features">
+            <h2 class="section-title">Hizmetlerimiz</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🪳</div>
+                    <h3>Hamam Böceği İlaçlaması</h3>
+                    <p>Etkili ve kalıcı hamam böceği kontrolü ile hijyenik ortamlar oluşturuyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🐀</div>
+                    <h3>Fare-Sıçan Kontrolü</h3>
+                    <p>Profesyonel kemirgen kontrolü ile işletmenizi ve evinizi koruyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🦟</div>
+                    <h3>Sivrisinek İlaçlaması</h3>
+                    <p>Sivrisinek larva ve ergin mücadelesi ile rahat bir yaz mevsimi.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🐜</div>
+                    <h3>Karınca İlaçlaması</h3>
+                    <p>Karınca kolonilerinin tamamen yok edilmesi için özel çözümler.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🕷️</div>
+                    <h3>Örümcek Kontrolü</h3>
+                    <p>Örümcek ve ağlarından arınmış temiz yaşam alanları.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🦂</div>
+                    <h3>Akrep İlaçlaması</h3>
+                    <p>Akrep tehlikesine karşı etkili koruma ve önleme.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="contact-content">
+                <h2 class="section-title">İletişim</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📞</span>
+                        <span>0 (XXX) XXX XX XX</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📧</span>
+                        <span>info@nursiilaclama.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <span>İstanbul, Türkiye</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="portalContainer" class="portal-container">
+        <div class="portal-header">
+            <h2>Hoş Geldiniz, <span id="username"></span></h2>
+            <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+
+        <div id="adminSection" class="admin-section" style="display: none;">
+            <h3>📤 Yönetici Paneli - İlaçlama Raporu Yükleme</h3>
+            <p>Müşteri seçin ve ilaçlama raporlarını yükleyin:</p>
+            <select id="clientSelect" style="width: 100%; padding: 0.7rem; margin: 1rem 0; border-radius: 5px; border: 2px solid #97bc62;">
+                <option value="">Müşteri Seçin</option>
+            </select>
+            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.png,.jpg,.jpeg">
+            <button class="submit-btn" onclick="uploadFile()" id="uploadBtn">Rapor Yükle</button>
+        </div>
+
+        <h3 style="margin-bottom: 1rem;">📋 İlaçlama Raporlarınız</h3>
+        <div id="documentsGrid" class="documents-grid">
+            <div class="loading">Yükleniyor...</div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 1.5rem; color: #2c5f2d;">Müşteri Girişi</h2>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="usernameInput">Kullanıcı Adı</label>
+                    <input type="text" id="usernameInput" required>
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Şifre</label>
+                    <input type="password" id="passwordInput" required>
+                </div>
+                <div class="error-message" id="errorMessage">Kullanıcı adı veya şifre hatalı!</div>
+                <button type="submit" class="submit-btn">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Nursi İlaçlama. Tüm hakları saklıdır.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Sağlıklı yaşam alanları için güvenilir çözüm ortağınız</p>
+    </footer>
+
+    <script>
+        // Kullanıcı veritabanı
+        const users = {
+            'admin': { password: 'nursi2025', role: 'admin', name: 'Yönetici' },
+            'starbucks': { password: 'sb123', role: 'client', name: 'Starbucks Taksim' },
+            'hilton': { password: 'hilton456', role: 'client', name: 'Hilton Hotel' },
+            'migros': { password: 'mg789', role: 'client', name: 'Migros AVM' }
+        };
+
+        let currentUser = null;
+
+        async function loadUserDocuments(username) {
+            try {
+                const result = await window.storage.get(`nursi_docs:${username}`);
+                return result ? JSON.parse(result.value) : [];
+            } catch (error) {
+                console.log('Kullanıcı raporları henüz yok:', error);
+                return [];
+            }
+        }
+
+        async function saveUserDocuments(username, documents) {
+            try {
+                await window.storage.set(`nursi_docs:${username}`, JSON.stringify(documents));
+                return true;
+            } catch (error) {
+                console.error('Kaydetme hatası:', error);
+                return false;
+            }
+        }
+
+        async function getAllClients() {
+            return Object.keys(users).filter(u => users[u].role === 'client');
+        }
+
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('usernameInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = { username, ...users[username] };
+                closeLoginModal();
+                showPortal();
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        async function showPortal() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('portalContainer').classList.add('active');
+            document.getElementById('username').textContent = currentUser.name;
+
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminSection').style.display = 'block';
+                loadClientOptions();
+                await loadAllDocuments();
+            } else {
+                document.getElementById('adminSection').style.display = 'none';
+                await loadDocuments();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('portalContainer').classList.remove('active');
+        }
+
+        function loadClientOptions() {
+            const select = document.getElementById('clientSelect');
+            select.innerHTML = '<option value="">Müşteri Seçin</option>';
+            Object.keys(users).forEach(username => {
+                if (users[username].role === 'client') {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = users[username].name;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function showSuccessMessage(message) {
+            const msgEl = document.getElementById('successMessage');
+            msgEl.textContent = message;
+            msgEl.style.display = 'block';
+            setTimeout(() => {
+                msgEl.style.display = 'none';
+            }, 3000);
+        }
+
+        async function uploadFile() {
+            const clientSelect = document.getElementById('clientSelect');
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const selectedClient = clientSelect.value;
+
+            if (!selectedClient) {
+                alert('Lütfen önce bir müşteri seçin!');
+                return;
+            }
+
+            if (fileInput.files.length === 0) {
+                alert('Lütfen dosya seçin!');
+                return;
+            }
+
+            // Dosya boyutu kontrolü (5MB limit)
+            for (const file of fileInput.files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name} dosyası çok büyük! Maksimum 5MB olmalıdır.`);
+                    return;
+                }
+            }
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Yükleniyor...';
+
+            try {
+                const existingDocs = await loadUserDocuments(selectedClient);
+                let uploadedCount = 0;
+
+                for (const file of fileInput.files) {
+                    const reader = new FileReader();
+                    await new Promise((resolve, reject) => {
+                        reader.onload = function(e) {
+                            const doc = {
+                                id: Date.now() + Math.random(),
+                                name: file.name,
+                                date: new Date().toLocaleDateString('tr-TR'),
+                                time: new Date().toLocaleTimeString('tr-TR'),
+                                type: file.type,
+                                data: e.target.result
+                            };
+                            existingDocs.push(doc);
+                            uploadedCount++;
+                            resolve();
+                        };
+                        reader.onerror = () => reject(new Error('Dosya okuma hatası'));
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+                const saved = await saveUserDocuments(selectedClient, existingDocs);
+                if (saved) {
+                    showSuccessMessage(`${uploadedCount} rapor başarıyla yüklendi!`);
+                    await loadAllDocuments();
+                    fileInput.value = '';
+                    clientSelect.value = '';
+                } else {
+                    alert('Raporlar kaydedilemedi. Lütfen tekrar deneyin.');
+                }
+            } catch (error) {
+                console.error('Yükleme hatası:', error);
+                alert('Yükleme sırasında hata oluştu: ' + error.message);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Rapor Yükle';
+            }
+        }
+
+        async function loadDocuments() {
+            const grid = document.getElementById('documentsGrid');
+            grid.innerHTML = '<div class="loading">Yükleniyor...</div>';
+
+            try {
+                const docs = await loadUserDocuments(currentUser.username);
+
+                if (docs.length === 0) {
+                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Henüz ilaçlama raporu bulunmamaktadır.</p>';
+                    return;
+                }
+
+                grid.innerHTML = docs.map(doc => `
+                    <div class="document-card">
+                        <div class="document-icon">${getFileIcon(doc.name)}</div>
+                        <div class="document-name">${doc.name}</div>
+                        <div class="document-date">${doc.date}</div>
+                        <button class="download-btn" onclick="downloadFile('${currentUser.username}', '${doc.id}')">İndir</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #e74c3c;">Yükleme hatası oluştu.</p>';
+            }
+        }
+
+        async function loadAllDocuments() {
+            const grid = document.getElementById('documentsGrid');
+            grid.innerHTML = '<div class="loading">Yükleniyor...</div>';
+
+            try {
+                const clients = await getAllClients();
+                let allDocs = [];
+
+                for (const client of clients) {
+                    const docs = await loadUserDocuments(client);
+                    docs.forEach(doc => {
+                        allDocs.push({ ...doc, client: users[client].name, clientUsername: client });
+                    });
+                }
+
+                if (allDocs.length === 0) {
+                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Henüz yüklenmiş rapor bulunmamaktadır.</p>';
+                    return;
+                }
+
+                grid.innerHTML = allDocs.map(doc => `
+                    <div class="document-card">
+                        <div class="document-icon">${getFileIcon(doc.name)}</div>
+                        <div class="document-name">${doc.name}</div>
+                        <div style="color: #2c5f2d; font-size: 0.9rem; margin: 0.5rem 0; font-weight: 600;">${doc.client}</div>
+                        <div class="document-date">${doc.date}</div>
+                        <button class="download-btn" onclick="downloadFile('${doc.clientUsername}', '${doc.id}')">İndir</button>
+                        <button class="delete-btn" onclick="deleteFile('${doc.clientUsername}', '${doc.id}')">Sil</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #e74c3c;">Yükleme hatası oluştu.</p>';
+            }
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (ext === 'pdf') return '📄';
+            if (['png', 'jpg', 'jpeg'].includes(ext)) return '🖼️';
+            return '📎';
+        }
+
+        async function downloadFile(username, docId) {
+            try {
+                const docs = await loadUserDocuments(username);
+                const doc = docs.find(d => d.id == docId);
+
+                if (doc) {
+                    const link = document.createElement('a');
+                    link.href = doc.data;
+                    link.download = doc.name;
+                    link.click();
+                }
+            } catch (error) {
+                alert('İndirme hatası: ' + error.message);
+            }
+        }
+
+        async function deleteFile(username, docId) {
+            if (!confirm('Bu raporu silmek istediğinizden emin misiniz?')) {
+                return;
+            }
+
+            try {
+                const docs = await loadUserDocuments(username);
+                const filteredDocs = docs.filter(d => d.id != docId);
+                await saveUserDocuments(username, filteredDocs);
+                showSuccessMessage('Rapor başarıyla silindi!');
+                await loadAllDocuments();
+            } catch (error) {
+                alert('Silme hatası: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
