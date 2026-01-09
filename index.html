@@ -535,19 +535,19 @@
 
         let currentUser = null;
 
-        async function loadUserDocuments(username) {
+        function loadUserDocuments(username) {
             try {
-                const result = await window.storage.get(`nursi_docs:${username}`);
-                return result ? JSON.parse(result.value) : [];
+                const data = localStorage.getItem(`nursi_docs:${username}`);
+                return data ? JSON.parse(data) : [];
             } catch (error) {
                 console.log('Kullanıcı raporları henüz yok:', error);
                 return [];
             }
         }
 
-        async function saveUserDocuments(username, documents) {
+        function saveUserDocuments(username, documents) {
             try {
-                await window.storage.set(`nursi_docs:${username}`, JSON.stringify(documents));
+                localStorage.setItem(`nursi_docs:${username}`, JSON.stringify(documents));
                 return true;
             } catch (error) {
                 console.error('Kaydetme hatası:', error);
@@ -593,10 +593,10 @@
             if (currentUser.role === 'admin') {
                 document.getElementById('adminSection').style.display = 'block';
                 loadClientOptions();
-                await loadAllDocuments();
+                loadAllDocuments();
             } else {
                 document.getElementById('adminSection').style.display = 'none';
-                await loadDocuments();
+                loadDocuments();
             }
         }
 
@@ -655,7 +655,7 @@
             uploadBtn.textContent = 'Yükleniyor...';
 
             try {
-                const existingDocs = await loadUserDocuments(selectedClient);
+                const existingDocs = loadUserDocuments(selectedClient);
                 let uploadedCount = 0;
 
                 for (const file of fileInput.files) {
@@ -679,10 +679,10 @@
                     });
                 }
 
-                const saved = await saveUserDocuments(selectedClient, existingDocs);
+                const saved = saveUserDocuments(selectedClient, existingDocs);
                 if (saved) {
                     showSuccessMessage(`${uploadedCount} rapor başarıyla yüklendi!`);
-                    await loadAllDocuments();
+                    loadAllDocuments();
                     fileInput.value = '';
                     clientSelect.value = '';
                 } else {
@@ -702,7 +702,7 @@
             grid.innerHTML = '<div class="loading">Yükleniyor...</div>';
 
             try {
-                const docs = await loadUserDocuments(currentUser.username);
+                const docs = loadUserDocuments(currentUser.username);
 
                 if (docs.length === 0) {
                     grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Henüz ilaçlama raporu bulunmamaktadır.</p>';
@@ -731,7 +731,7 @@
                 let allDocs = [];
 
                 for (const client of clients) {
-                    const docs = await loadUserDocuments(client);
+                    const docs = loadUserDocuments(client);
                     docs.forEach(doc => {
                         allDocs.push({ ...doc, client: users[client].name, clientUsername: client });
                     });
@@ -766,7 +766,7 @@
 
         async function downloadFile(username, docId) {
             try {
-                const docs = await loadUserDocuments(username);
+                const docs = loadUserDocuments(username);
                 const doc = docs.find(d => d.id == docId);
 
                 if (doc) {
@@ -786,11 +786,11 @@
             }
 
             try {
-                const docs = await loadUserDocuments(username);
+                const docs = loadUserDocuments(username);
                 const filteredDocs = docs.filter(d => d.id != docId);
-                await saveUserDocuments(username, filteredDocs);
+                saveUserDocuments(username, filteredDocs);
                 showSuccessMessage('Rapor başarıyla silindi!');
-                await loadAllDocuments();
+                loadAllDocuments();
             } catch (error) {
                 alert('Silme hatası: ' + error.message);
             }
